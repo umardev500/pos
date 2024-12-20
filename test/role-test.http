@@ -1,0 +1,7 @@
+### Create new role
+POST {{api}}/roles
+Content-Type: application/json
+
+{
+    "name": "lorem"
+}
