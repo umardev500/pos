@@ -7,21 +7,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type IdParam string
-
-func (id IdParam) Validate() error {
-	_, err := uuid.Parse(string(id))
-	if err != nil {
-		return ErrInvalidId
-	}
-
-	return nil
-}
-
-func (id IdParam) String() string {
-	return string(id)
-}
-
 type IDsReq struct {
 	IDs []uuid.UUID `json:"ids" validate:"required,min=1"`
 }

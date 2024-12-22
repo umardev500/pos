@@ -5,3 +5,17 @@ Content-Type: application/json
 {
     "name": "lorem"
 }
+
+### Delete roles
+DELETE {{api}}/roles?unscoped=true
+Content-Type: application/json
+
+{
+    "ids": [
+        "00000000-0000-0000-0000-000000000001",
+        "00000000-0000-0000-0000-000000000002"
+    ]
+}
+
+### Get role by id
+GET {{api}}/roles/00000000-0000-0000-0000-000000000002

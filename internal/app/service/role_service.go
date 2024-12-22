@@ -40,7 +40,7 @@ func (r *roleService) CreateRole(ctx context.Context, req *model.CreateRoleReque
 	}
 }
 
-func (r *roleService) DeleteRoles(ctx context.Context, req pkg.IDsReq) *pkg.Response {
+func (r *roleService) DeleteRoles(ctx context.Context, req *pkg.IDsReq) *pkg.Response {
 	fields := r.validate.Struct(req)
 	res := pkg.ValidationResp(fields)
 	if res != nil {
@@ -72,13 +72,13 @@ func (r *roleService) GetRoles(ctx context.Context) *pkg.Response {
 	}
 }
 
-func (r *roleService) GetRoleById(ctx context.Context, id pkg.IdParam) *pkg.Response {
-	err := id.Validate()
+func (r *roleService) GetRoleById(ctx context.Context, id string) *pkg.Response {
+	err := r.validate.Uuid(id)
 	if err != nil {
 		return pkg.AutoSelectErrResp(err)
 	}
 
-	role, err := r.repo.GetRoleById(ctx, id.String())
+	role, err := r.repo.GetRoleById(ctx, id)
 	if err != nil {
 		return pkg.DbErrResp(err, id)
 	}
@@ -91,13 +91,13 @@ func (r *roleService) GetRoleById(ctx context.Context, id pkg.IdParam) *pkg.Resp
 	}
 }
 
-func (r *roleService) GetRolesByUserId(ctx context.Context, userId pkg.IdParam) *pkg.Response {
-	err := userId.Validate()
+func (r *roleService) GetRolesByUserId(ctx context.Context, userId string) *pkg.Response {
+	err := r.validate.Uuid(userId)
 	if err != nil {
 		return pkg.AutoSelectErrResp(err)
 	}
 
-	roles, err := r.repo.GetRolesByUserId(ctx, userId.String())
+	roles, err := r.repo.GetRolesByUserId(ctx, userId)
 	if err != nil {
 		return pkg.DbErrResp(err, userId)
 	}
@@ -110,8 +110,8 @@ func (r *roleService) GetRolesByUserId(ctx context.Context, userId pkg.IdParam) 
 	}
 }
 
-func (r *roleService) UpdateRoleById(ctx context.Context, id pkg.IdParam, req *model.UpdateRoleRequest) *pkg.Response {
-	err := id.Validate()
+func (r *roleService) UpdateRoleById(ctx context.Context, id string, req *model.UpdateRoleRequest) *pkg.Response {
+	err := r.validate.Uuid(id)
 	if err != nil {
 		return pkg.AutoSelectErrResp(err)
 	}
@@ -122,7 +122,7 @@ func (r *roleService) UpdateRoleById(ctx context.Context, id pkg.IdParam, req *m
 		return res
 	}
 
-	err = r.repo.UpdateRoleById(ctx, id.String(), req)
+	err = r.repo.UpdateRoleById(ctx, id, req)
 	if err != nil {
 		return pkg.DbErrResp(err, req)
 	}

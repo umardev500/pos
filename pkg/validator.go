@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 )
 
@@ -14,6 +15,7 @@ type Validator interface {
 	// If `s` is invalid, the method will panic.
 	// It returns a slice of ValidationErr detailing the validation errors.
 	Struct(s interface{}) []ValidationErr
+	Uuid(s string) error
 }
 
 type validatorStruct struct {
@@ -61,6 +63,15 @@ func (v *validatorStruct) Struct(s interface{}) []ValidationErr {
 	}
 
 	return errs
+}
+
+func (v *validatorStruct) Uuid(s string) error {
+	_, err := uuid.Parse(s)
+	if err != nil {
+		return ErrInvalidId
+	}
+
+	return nil
 }
 
 func (v *validatorStruct) parseErr(fe validator.FieldError, field reflect.StructField) *ValidationErr {

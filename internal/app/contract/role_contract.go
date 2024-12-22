@@ -19,11 +19,11 @@ type RoleHandler interface {
 
 type RoleService interface {
 	CreateRole(ctx context.Context, req *model.CreateRoleRequest) *pkg.Response
-	DeleteRoles(ctx context.Context, req pkg.IDsReq) *pkg.Response
+	DeleteRoles(ctx context.Context, req *pkg.IDsReq) *pkg.Response
 	GetRoles(ctx context.Context) *pkg.Response
-	GetRoleById(ctx context.Context, id pkg.IdParam) *pkg.Response
-	GetRolesByUserId(ctx context.Context, userId pkg.IdParam) *pkg.Response
-	UpdateRoleById(ctx context.Context, id pkg.IdParam, req *model.UpdateRoleRequest) *pkg.Response
+	GetRoleById(ctx context.Context, id string) *pkg.Response
+	GetRolesByUserId(ctx context.Context, userId string) *pkg.Response
+	UpdateRoleById(ctx context.Context, id string, req *model.UpdateRoleRequest) *pkg.Response
 }
 
 type RoleRepository interface {
