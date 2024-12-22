@@ -3,12 +3,14 @@ package pkg
 import (
 	"context"
 	"fmt"
+	stdLog "log"
 	"os"
 	"sync"
 
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type GormInstance struct {
@@ -29,7 +31,19 @@ func NewGorm() *GormInstance {
 		dbName := os.Getenv("DB_NAME")
 
 		dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, pass, dbName)
-		db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+		// Use the GORM logger with level Info (you can change it to Silent, Error, or Warn)
+		newLogger := logger.New(
+			stdLog.New(os.Stdout, "\r\n", stdLog.LstdFlags), // io writer
+			logger.Config{
+				LogLevel: logger.Info, // Other options are: logger.Silent, logger.Error, logger.Warn
+				Colorful: true,        // Add color to logs (for console output)
+			},
+		)
+
+		db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+			Logger: newLogger,
+		})
 		if err != nil {
 			log.Fatal().Err(err).Msg("failed to connect to database")
 		}
