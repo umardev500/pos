@@ -55,16 +55,6 @@ func (r *roleHandler) GetRoleById(c *fiber.Ctx) error {
 	return c.Status(res.StatusCode).JSON(res)
 }
 
-func (r *roleHandler) GetRolesByUserId(c *fiber.Ctx) error {
-	var id = c.Params("id")
-
-	ctx, cancel := pkg.ParseUnscopedParamContextBase(c)
-	defer cancel()
-
-	res := r.service.GetRolesByUserId(ctx, id)
-	return c.Status(res.StatusCode).JSON(res)
-}
-
 func (r *roleHandler) GetRoles(c *fiber.Ctx) error {
 	ctx, cancel := pkg.ParseUnscopedParamContextBase(c)
 	defer cancel()

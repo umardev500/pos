@@ -29,7 +29,6 @@ func (rc *roleContainer) HandleApi(api fiber.Router) {
 	role.Delete("/", rc.roleHandler.DeleteRoles)
 	role.Get("/", rc.roleHandler.GetRoles)
 	role.Get("/:id", rc.roleHandler.GetRoleById)
-	role.Get("/user/:id", rc.roleHandler.GetRolesByUserId)
 }
 
 func (rc *roleContainer) HandleWeb(web fiber.Router) {}

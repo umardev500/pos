@@ -43,15 +43,6 @@ func (r *roleRepository) GetRoleById(ctx context.Context, id string) (*model.Rol
 	return &role, nil
 }
 
-func (r *roleRepository) GetRolesByUserId(ctx context.Context, id string) ([]model.Role, error) {
-	var roles []model.Role
-	var conn = r.db.GetConn(ctx)
-
-	err := conn.Where("user_id = ?", id).Find(&roles).Error
-
-	return roles, err
-}
-
 func (r *roleRepository) GetRoles(ctx context.Context) ([]model.Role, error) {
 	var roles []model.Role
 	var conn = r.db.GetConn(ctx)

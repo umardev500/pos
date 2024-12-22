@@ -18,4 +18,4 @@ Content-Type: application/json
 }
 
 ### Get role by id
-GET {{api}}/roles/00000000-0000-0000-0000-000000000002
+GET {{api}}/roles/00000000-0000-0000-0000-000000000001

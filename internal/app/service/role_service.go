@@ -91,25 +91,6 @@ func (r *roleService) GetRoleById(ctx context.Context, id string) *pkg.Response 
 	}
 }
 
-func (r *roleService) GetRolesByUserId(ctx context.Context, userId string) *pkg.Response {
-	err := r.validate.Uuid(userId)
-	if err != nil {
-		return pkg.AutoSelectErrResp(err)
-	}
-
-	roles, err := r.repo.GetRolesByUserId(ctx, userId)
-	if err != nil {
-		return pkg.DbErrResp(err, userId)
-	}
-
-	return &pkg.Response{
-		StatusCode: fiber.StatusOK,
-		Success:    true,
-		Message:    "Roles fetched successfully",
-		Data:       roles,
-	}
-}
-
 func (r *roleService) UpdateRoleById(ctx context.Context, id string, req *model.UpdateRoleRequest) *pkg.Response {
 	err := r.validate.Uuid(id)
 	if err != nil {
