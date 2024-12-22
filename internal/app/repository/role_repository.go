@@ -24,13 +24,13 @@ func (r *roleRepository) CreateRole(ctx context.Context, data *model.CreateRoleR
 	return r.db.GetConn(ctx).Create(data).Error
 }
 
-func (r *roleRepository) DeleteRoles(ctx context.Context, ids []uuid.UUID) error {
+func (r *roleRepository) DeleteRoles(ctx context.Context, ids []string) error {
 	var conn = r.db.GetConn(ctx)
 
 	return conn.Where("id IN ?", ids).Delete(&model.Role{}).Error
 }
 
-func (r *roleRepository) GetRoleById(ctx context.Context, id uuid.UUID) (*model.Role, error) {
+func (r *roleRepository) GetRoleById(ctx context.Context, id string) (*model.Role, error) {
 	var role model.Role
 	var conn = r.db.GetConn(ctx)
 
@@ -43,7 +43,7 @@ func (r *roleRepository) GetRoleById(ctx context.Context, id uuid.UUID) (*model.
 	return &role, nil
 }
 
-func (r *roleRepository) GetRolesByUserId(ctx context.Context, id uuid.UUID) ([]model.Role, error) {
+func (r *roleRepository) GetRolesByUserId(ctx context.Context, id string) ([]model.Role, error) {
 	var roles []model.Role
 	var conn = r.db.GetConn(ctx)
 
@@ -61,7 +61,7 @@ func (r *roleRepository) GetRoles(ctx context.Context) ([]model.Role, error) {
 	return roles, err
 }
 
-func (r *roleRepository) UpdateRoleById(ctx context.Context, id uuid.UUID, data *model.UpdateRoleRequest) error {
+func (r *roleRepository) UpdateRoleById(ctx context.Context, id string, data *model.UpdateRoleRequest) error {
 	var conn = r.db.GetConn(ctx)
 
 	return conn.Model(&model.Role{}).Update("name", data.Name).Error

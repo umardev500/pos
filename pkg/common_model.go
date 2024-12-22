@@ -7,8 +7,27 @@ import (
 	"gorm.io/gorm"
 )
 
+type IdParam string
+
+func (id IdParam) Validate() error {
+	_, err := uuid.Parse(string(id))
+	return err
+}
+
+func (id IdParam) String() string {
+	return string(id)
+}
+
 type IDsReq struct {
 	IDs []uuid.UUID `json:"ids" validate:"required,min=1"`
+}
+
+func (ids IDsReq) ToStringSlice() []string {
+	var res []string
+	for _, id := range ids.IDs {
+		res = append(res, id.String())
+	}
+	return res
 }
 
 type Response struct {

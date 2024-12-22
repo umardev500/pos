@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 	"github.com/umardev500/pos/internal/app/model"
 	"github.com/umardev500/pos/pkg"
 )
@@ -24,9 +23,9 @@ type RoleService interface {
 
 type RoleRepository interface {
 	CreateRole(ctx context.Context, data *model.CreateRoleRequest) error
-	DeleteRoles(ctx context.Context, ids []uuid.UUID) error
+	DeleteRoles(ctx context.Context, ids []string) error
 	GetRoles(ctx context.Context) ([]model.Role, error)
-	GetRoleById(ctx context.Context, id uuid.UUID) (*model.Role, error)
-	GetRolesByUserId(ctx context.Context, userId uuid.UUID) ([]model.Role, error)
-	UpdateRoleById(ctx context.Context, id uuid.UUID, data *model.UpdateRoleRequest) error
+	GetRoleById(ctx context.Context, id string) (*model.Role, error)
+	GetRolesByUserId(ctx context.Context, userId string) ([]model.Role, error)
+	UpdateRoleById(ctx context.Context, id string, data *model.UpdateRoleRequest) error
 }
