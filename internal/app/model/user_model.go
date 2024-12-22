@@ -9,7 +9,7 @@ type User struct {
 	Email         string `json:"email"`
 	Username      string `json:"username"`
 	Password_hash string `json:"password_hash,omitempty"`
-	Roles         []Role `json:"roles" gorm:"many2many:user_roles;foreignKey:ID;references:id;joinForeignKey:UserID;"`
+	Roles         []Role `json:"roles" gorm:"many2many:user_roles"`
 	pkg.TimeCommon
 }
 
