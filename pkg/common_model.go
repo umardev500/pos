@@ -30,9 +30,9 @@ type Response struct {
 }
 
 type TimeCommon struct {
-	CreatedAt time.Time      `json:"created_at"`
-	UpdateAt  *time.Time     `json:"updated_at,omitempty"`
-	DeletedAt gorm.DeletedAt `json:"deleted_at,omitempty"`
+	CreatedAt time.Time       `json:"created_at"`
+	UpdateAt  *time.Time      `json:"updated_at,omitempty"`
+	DeletedAt *gorm.DeletedAt `json:"deleted_at,omitempty"`
 }
 
 type ValidationErr struct {
