@@ -39,3 +39,97 @@ func (r *roleService) CreateRole(ctx context.Context, req *model.CreateRoleReque
 		Message:    "Role created successfully",
 	}
 }
+
+func (r *roleService) DeleteRoles(ctx context.Context, req pkg.IDsReq) *pkg.Response {
+	fields := r.validate.Struct(req)
+	res := pkg.ValidationResp(fields)
+	if res != nil {
+		return res
+	}
+
+	err := r.repo.DeleteRoles(ctx, req.StringSlice())
+	if err != nil {
+		return pkg.DbErrResp(err, req)
+	}
+
+	return &pkg.Response{
+		StatusCode: fiber.StatusOK,
+		Success:    true,
+		Message:    "Roles deleted successfully",
+	}
+}
+
+func (r *roleService) GetRoles(ctx context.Context) *pkg.Response {
+	roles, err := r.repo.GetRoles(ctx)
+	if err != nil {
+		return pkg.DbErrResp(err, nil)
+	}
+
+	return &pkg.Response{
+		StatusCode: fiber.StatusOK,
+		Success:    true,
+		Data:       roles,
+	}
+}
+
+func (r *roleService) GetRoleById(ctx context.Context, id pkg.IdParam) *pkg.Response {
+	err := id.Validate()
+	if err != nil {
+		return pkg.AutoSelectErrResp(err)
+	}
+
+	role, err := r.repo.GetRoleById(ctx, id.String())
+	if err != nil {
+		return pkg.DbErrResp(err, id)
+	}
+
+	return &pkg.Response{
+		StatusCode: fiber.StatusOK,
+		Success:    true,
+		Message:    "Role fetched successfully",
+		Data:       role,
+	}
+}
+
+func (r *roleService) GetRolesByUserId(ctx context.Context, userId pkg.IdParam) *pkg.Response {
+	err := userId.Validate()
+	if err != nil {
+		return pkg.AutoSelectErrResp(err)
+	}
+
+	roles, err := r.repo.GetRolesByUserId(ctx, userId.String())
+	if err != nil {
+		return pkg.DbErrResp(err, userId)
+	}
+
+	return &pkg.Response{
+		StatusCode: fiber.StatusOK,
+		Success:    true,
+		Message:    "Roles fetched successfully",
+		Data:       roles,
+	}
+}
+
+func (r *roleService) UpdateRoleById(ctx context.Context, id pkg.IdParam, req *model.UpdateRoleRequest) *pkg.Response {
+	err := id.Validate()
+	if err != nil {
+		return pkg.AutoSelectErrResp(err)
+	}
+
+	fields := r.validate.Struct(req)
+	res := pkg.ValidationResp(fields)
+	if res != nil {
+		return res
+	}
+
+	err = r.repo.UpdateRoleById(ctx, id.String(), req)
+	if err != nil {
+		return pkg.DbErrResp(err, req)
+	}
+
+	return &pkg.Response{
+		StatusCode: fiber.StatusOK,
+		Success:    true,
+		Message:    "Role updated successfully",
+	}
+}

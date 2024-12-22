@@ -29,11 +29,24 @@ func AutoSelectErrResp(err error) *Response {
 	var resp *Response
 
 	switch err {
+	case ErrInvalidId:
+		resp = InvalidIdResp(err)
 	default:
 		resp = InServerErrResp(err)
 	}
 
 	return resp
+}
+
+func InvalidIdResp(err error) *Response {
+	errCode := LogError(err)
+	return &Response{
+		StatusCode: fiber.ErrUnprocessableEntity.Code,
+		Message:    "Invalid ID format. The provided ID is not a valid UUID",
+		Errors:     nil,
+		Code:       "INVALID_ID",
+		Ref:        errCode,
+	}
 }
 
 // InServerErrResp generates a response for internal server errors

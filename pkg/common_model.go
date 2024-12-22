@@ -11,7 +11,11 @@ type IdParam string
 
 func (id IdParam) Validate() error {
 	_, err := uuid.Parse(string(id))
-	return err
+	if err != nil {
+		return ErrInvalidId
+	}
+
+	return nil
 }
 
 func (id IdParam) String() string {
@@ -22,7 +26,7 @@ type IDsReq struct {
 	IDs []uuid.UUID `json:"ids" validate:"required,min=1"`
 }
 
-func (ids IDsReq) ToStringSlice() []string {
+func (ids IDsReq) StringSlice() []string {
 	var res []string
 	for _, id := range ids.IDs {
 		res = append(res, id.String())
