@@ -17,7 +17,7 @@ func NewUserHandler(s contract.UserService) contract.UserHandler {
 }
 
 func (u *userHandler) GetUsers(c *fiber.Ctx) error {
-	ctx, cancel := pkg.BaseContext()
+	ctx, cancel := pkg.ParseUnscopedParamContextBase(c)
 	defer cancel()
 
 	res := u.s.GetUsers(ctx)
