@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 )
 
 func ValidationResp(fields []ValidationErr) *Response {
@@ -18,7 +19,7 @@ func ValidationResp(fields []ValidationErr) *Response {
 
 	return &Response{
 		StatusCode: fiber.ErrUnprocessableEntity.Code,
-		Message:    "validation error",
+		Message:    "Validation error",
 		Errors:     fields,
 		Code:       "VALIDATION_ERR",
 		Ref:        refCode,
@@ -31,6 +32,8 @@ func AutoSelectErrResp(err error) *Response {
 	switch err {
 	case ErrInvalidId:
 		resp = InvalidIdResp(err)
+	case gorm.ErrRecordNotFound:
+		resp = NotFondResp(err)
 	default:
 		resp = InServerErrResp(err)
 	}
@@ -60,9 +63,20 @@ func InServerErrResp(err error) *Response {
 	refCode := LogError(err)
 	return &Response{
 		StatusCode: fiber.ErrInternalServerError.Code,
-		Message:    "internal server error",
+		Message:    "Internal server error",
 		Errors:     nil,
 		Code:       "SERVER_ERR",
+		Ref:        refCode,
+	}
+}
+
+func NotFondResp(err error) *Response {
+	refCode := LogError(err)
+	return &Response{
+		StatusCode: fiber.StatusNotFound,
+		Message:    "Resource not found",
+		Errors:     nil,
+		Code:       "NOT_FOUND",
 		Ref:        refCode,
 	}
 }
@@ -81,6 +95,8 @@ func DbErrResp(err error, model interface{}) *Response {
 	switch err := err.(type) {
 	case *pgconn.PgError:
 		resp = parsePgErr(err, model)
+	default:
+		resp = AutoSelectErrResp(err)
 	}
 
 	return resp
